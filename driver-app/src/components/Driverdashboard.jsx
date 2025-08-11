@@ -24,6 +24,8 @@ const DriverDashboard = () => {
       setRideRequest(data);
     });
 
+   
+
     // 3️⃣ Handle ride already taken
     socket.on("rideAlreadyTaken", ({ bookingId }) => {
       console.warn(`⚠️ Ride ${bookingId} already taken by another driver`);
