@@ -1,8 +1,9 @@
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation, Navigate } from "react-router-dom";
 import Home from "./pages/Home";
 import DriverDashboard from "./features/dashboard/DriverDashboard";
-import testDrivers from "./testdrivers"; // ✅ Plain data object with driver locations
+import testDrivers from "./testdrivers";
 import ErrorBoundary from "./components/ErrorBoundary";
+import { useAuth } from "./context/AuthContext";
 
 // Utility to parse query params
 function useQueryParams() {
@@ -17,7 +18,6 @@ function DriverDashboardWrapper() {
   const driverId = query.get("id") || "driver123";
   const vehicleType = query.get("type") || "truck";
 
-  // ✅ Safe lookup with fallback
   const location =
     testDrivers[driverId]?.location || testDrivers["driver123"].location;
 
@@ -30,6 +30,23 @@ function DriverDashboardWrapper() {
   );
 }
 
+// Route guard for approved drivers
+function RequireApproval({ children }) {
+  const { driver, loading } = useAuth();
+
+  if (loading) return <div>Loading...</div>;
+
+  if (!driver) {
+    return <Navigate to="/" replace />;
+  }
+
+  if (driver?.onboarding?.status !== "approved") {
+    return <Navigate to="/onboarding" replace />;
+  }
+
+  return children;
+}
+
 export default function App() {
   return (
     <BrowserRouter>
@@ -39,10 +56,14 @@ export default function App() {
           path="/dashboard"
           element={
             <ErrorBoundary>
-              <DriverDashboardWrapper />
+              <RequireApproval>
+                <DriverDashboardWrapper />
+              </RequireApproval>
             </ErrorBoundary>
           }
         />
+        {/* Placeholder onboarding route */}
+        <Route path="/onboarding" element={<div>Onboarding Page</div>} />
       </Routes>
     </BrowserRouter>
   );

@@ -1,11 +1,26 @@
 import { useEffect, useRef } from 'react';
 import socket from '../socket/socket';
+import { useAuth } from '../context/AuthContext';
 
-export const useRideSocket = ({ driverId, location, vehicleType, respondedBookingIds, setRideRequest, setRespondedBookingIds }) => {
+export const useRideSocket = ({
+  driverId,
+  location,
+  vehicleType,
+  respondedBookingIds,
+  setRideRequest,
+  setRespondedBookingIds
+}) => {
   const isMountedRef = useRef(false);
   const type = String(vehicleType || '').trim().toLowerCase();
+  const { driver } = useAuth();
 
   useEffect(() => {
+    // ✅ Only connect if driver is approved
+    if (!driver || driver?.onboarding?.status !== 'approved') {
+      console.warn('Driver not approved — socket connection skipped.');
+      return;
+    }
+
     if (!socket.connected) socket.connect();
 
     const registerDriver = () => {
@@ -55,5 +70,5 @@ export const useRideSocket = ({ driverId, location, vehicleType, respondedBookin
       socket.offAny(handleUnknownEvent);
       isMountedRef.current = false;
     };
-  }, [respondedBookingIds, driverId, location, type]);
+  }, [respondedBookingIds, driverId, location, type, driver]);
 };
