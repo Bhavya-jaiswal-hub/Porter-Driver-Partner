@@ -4,6 +4,8 @@ import DriverDashboard from "./features/dashboard/DriverDashboard";
 import testDrivers from "./testdrivers";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { useAuth } from "./context/AuthContext";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 // Utility to parse query params
 function useQueryParams() {
@@ -52,6 +54,9 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+
         <Route
           path="/dashboard"
           element={
