@@ -3,7 +3,7 @@ import Home from "./pages/Home";
 import DriverDashboard from "./features/dashboard/DriverDashboard";
 import testDrivers from "./testdrivers";
 import ErrorBoundary from "./components/ErrorBoundary";
-import { useAuth } from "./context/AuthContext";
+import { useAuth } from "./hooks/useAuth";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 

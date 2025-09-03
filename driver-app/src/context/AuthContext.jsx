@@ -1,50 +1,58 @@
-import { createContext, useContext, useState, useEffect } from 'react';
-import axios from 'axios';
+import { createContext, useState, useEffect } from "react";
+import api from "../services/api"; // Axios instance with baseURL + token interceptor
 
-const AuthContext = createContext();
+export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [driver, setDriver] = useState(null); // will hold driver object from backend
+  const [driver, setDriver] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Fetch driver profile on mount if token exists
-  useEffect(() => {
-    const token = localStorage.getItem('driverToken');
-    if (!token) {
-      setLoading(false);
-      return;
-    }
+  // Called after successful login
+  const login = async (token, driverData = null) => {
+    localStorage.setItem("driverToken", token);
 
-    axios
-      .get('/api/driver/auth/me', {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((res) => {
+    if (driverData) {
+      // If driver data is already provided, just set it
+      setDriver(driverData);
+    } else {
+      try {
+        // Otherwise, fetch it from /me
+        const res = await api.get("/api/driver/auth/me");
         setDriver(res.data);
-      })
-      .catch((err) => {
-        console.error('Failed to fetch driver profile:', err);
-        localStorage.removeItem('driverToken');
-      })
-      .finally(() => setLoading(false));
-  }, []);
-
-  const login = (token, driverData) => {
-    localStorage.setItem('driverToken', token);
-    setDriver(driverData);
+      } catch (err) {
+        console.error("Failed to fetch driver after login:", err);
+        localStorage.removeItem("driverToken");
+        setDriver(null);
+      }
+    }
   };
 
+  // Called when logging out
   const logout = () => {
-    localStorage.removeItem('driverToken');
+    localStorage.removeItem("driverToken");
     setDriver(null);
   };
 
+  // Restore session on page load
+  useEffect(() => {
+    const token = localStorage.getItem("driverToken");
+    if (token) {
+      api
+        .get("/api/driver/auth/me")
+        .then((res) => setDriver(res.data))
+        .catch(() => {
+          localStorage.removeItem("driverToken");
+          setDriver(null);
+        })
+        .finally(() => setLoading(false));
+    } else {
+      setLoading(false);
+    }
+  }, []);
+
   return (
-    <AuthContext.Provider value={{ driver, setDriver, login, logout, loading }}>
+    <AuthContext.Provider value={{ driver, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );
 };
-
-// Hook to use auth context
-export const useAuth = () => useContext(AuthContext);
