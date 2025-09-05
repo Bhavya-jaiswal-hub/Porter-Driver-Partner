@@ -35,20 +35,24 @@ export const AuthProvider = ({ children }) => {
 
   // Restore session on page load
   useEffect(() => {
-    const token = localStorage.getItem("driverToken");
-    if (token) {
-      api
-        .get("/api/driver/auth/me")
-        .then((res) => setDriver(res.data))
-        .catch(() => {
-          localStorage.removeItem("driverToken");
-          setDriver(null);
-        })
-        .finally(() => setLoading(false));
-    } else {
-      setLoading(false);
-    }
-  }, []);
+  const token = localStorage.getItem("driverToken");
+  console.log("Restoring session, token:", token);
+  if (token) {
+    api.get("/api/driver/auth/me")
+      .then((res) => {
+        console.log("Fetched driver:", res.data);
+        setDriver(res.data);
+      })
+      .catch((err) => {
+        console.error("Failed to restore session:", err);
+        localStorage.removeItem("driverToken");
+        setDriver(null);
+      })
+      .finally(() => setLoading(false));
+  } else {
+    setLoading(false);
+  }
+}, []);
 
   return (
     <AuthContext.Provider value={{ driver, login, logout, loading }}>

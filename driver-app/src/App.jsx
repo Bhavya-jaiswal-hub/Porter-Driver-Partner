@@ -4,8 +4,13 @@ import DriverDashboard from "./features/dashboard/DriverDashboard";
 import testDrivers from "./testdrivers";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { useAuth } from "./hooks/useAuth";
+import PersonalInfo from "./pages/onboarding/PersonalInfo";
+import VehicleInfo from "./pages/onboarding/VehicleInfo";
+import DocumentsUpload from "./pages/onboarding/DocumentsUpload";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Onboarding from "./pages/Onboarding";
+
 
 // Utility to parse query params
 function useQueryParams() {
@@ -56,6 +61,9 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/onboarding/personal" element={<PersonalInfo />} />
+<Route path="/onboarding/vehicle" element={<VehicleInfo />} />
+<Route path="/onboarding/documents" element={<DocumentsUpload />} />
 
         <Route
           path="/dashboard"
@@ -68,7 +76,16 @@ export default function App() {
           }
         />
         {/* Placeholder onboarding route */}
-        <Route path="/onboarding" element={<div>Onboarding Page</div>} />
+      <Route
+  path="/onboarding"
+  element={
+    <ErrorBoundary>
+      <Onboarding />
+    </ErrorBoundary>
+  }
+/>
+
+
       </Routes>
     </BrowserRouter>
   );
