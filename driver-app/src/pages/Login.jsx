@@ -54,7 +54,7 @@ export default function Login() {
       await login(token);
 
       toast({ title: "Login successful", status: "success", duration: 3000 });
-      navigate("/dashboard");
+      navigate("/");
     } catch (err) {
       console.error("Login error:", err.response || err);
       toast({

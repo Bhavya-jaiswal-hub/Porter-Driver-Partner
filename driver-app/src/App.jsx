@@ -10,7 +10,9 @@ import DocumentsUpload from "./pages/onboarding/DocumentsUpload";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Onboarding from "./pages/Onboarding";
-
+import TestLottie from "./pages/TestLottie";
+import RedirectIfAuth from "./components/RedirectIfAuth";
+import TestLottieInline from "./pages/TestLottieInline";
 
 // Utility to parse query params
 function useQueryParams() {
@@ -59,11 +61,27 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+      <Route
+  path="/login"
+  element={
+    <RedirectIfAuth>
+      <Login />
+    </RedirectIfAuth>
+  }
+/>
+       <Route
+  path="/register"
+  element={
+    <RedirectIfAuth>
+      <Register />
+    </RedirectIfAuth>
+  }
+/>
         <Route path="/onboarding/personal" element={<PersonalInfo />} />
 <Route path="/onboarding/vehicle" element={<VehicleInfo />} />
 <Route path="/onboarding/documents" element={<DocumentsUpload />} />
+<Route path="/test-lottie" element={<TestLottie />} />
+<Route path="/test-lottie-inline" element={<TestLottieInline />} />
 
         <Route
           path="/dashboard"
