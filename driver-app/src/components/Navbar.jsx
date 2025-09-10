@@ -7,7 +7,7 @@ import {
   IconButton,
   useDisclosure,
   VStack,
-  Collapse
+  Collapse,
 } from "@chakra-ui/react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
@@ -25,13 +25,13 @@ export default function Navbar() {
     navigate("/login");
   };
 
-  // Detect scroll position
+  // Detect scroll position for subtle shadow
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      setScrolled(window.scrollY > 10);
     };
     window.addEventListener("scroll", handleScroll);
-    handleScroll(); // run on mount
+    handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -45,26 +45,19 @@ export default function Navbar() {
       zIndex="1000"
       wrap="wrap"
       transition="all 0.3s ease"
-      bg={
-        scrolled
-          ? "rgba(255, 255, 255, 0.25)"
-          : "rgba(255, 255, 255, 0.15)"
-      }
-      backdropFilter="blur(12px) saturate(180%)"
-      borderBottom="1px solid rgba(255, 255, 255, 0.2)"
-      boxShadow={
-        scrolled
-          ? "0 0 25px rgba(0, 255, 255, 0.6)"
-          : "0 0 15px rgba(0, 255, 255, 0.4)"
-      }
+      bg="white"
+      borderBottom="1px solid"
+      borderColor="gray.200"
+      boxShadow={scrolled ? "sm" : "none"}
     >
       {/* Brand */}
       <Heading
         as={RouterLink}
         to="/"
         size="md"
-        color="white"
-        _hover={{ textDecoration: "none", color: "teal.100" }}
+        color="teal.600"
+        fontWeight="bold"
+        _hover={{ textDecoration: "none", color: "teal.700" }}
       >
         Delivery King
       </Heading>
@@ -72,21 +65,20 @@ export default function Navbar() {
       <Spacer />
 
       {/* Desktop Menu */}
-      <Flex gap={4} display={{ base: "none", md: "flex" }}>
+      <Flex gap={4} display={{ base: "none", md: "flex" }} align="center">
         {driver ? (
           <>
             <Button
               as={RouterLink}
               to="/onboarding"
               variant="ghost"
-              color="white"
-              _hover={{ bg: "whiteAlpha.200" }}
+              colorScheme="teal"
             >
               Onboarding
             </Button>
             <Button
               onClick={handleLogout}
-              colorScheme="green"
+              colorScheme="teal"
               variant="solid"
             >
               Logout
@@ -98,8 +90,7 @@ export default function Navbar() {
               as={RouterLink}
               to="/register"
               variant="ghost"
-              color="white"
-              _hover={{ bg: "whiteAlpha.200" }}
+              colorScheme="teal"
             >
               Register
             </Button>
@@ -107,8 +98,7 @@ export default function Navbar() {
               as={RouterLink}
               to="/login"
               variant="ghost"
-              color="white"
-              _hover={{ bg: "whiteAlpha.200" }}
+              colorScheme="teal"
             >
               Login
             </Button>
@@ -129,7 +119,7 @@ export default function Navbar() {
         display={{ base: "flex", md: "none" }}
         icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
         variant="ghost"
-        color="white"
+        colorScheme="teal"
         onClick={onToggle}
         aria-label="Toggle Navigation"
       />
@@ -148,8 +138,7 @@ export default function Navbar() {
                 as={RouterLink}
                 to="/onboarding"
                 variant="ghost"
-                color="white"
-                _hover={{ bg: "whiteAlpha.200" }}
+                colorScheme="teal"
                 onClick={onToggle}
               >
                 Onboarding
@@ -159,11 +148,10 @@ export default function Navbar() {
                   handleLogout();
                   onToggle();
                 }}
-                colorScheme="green"
+                colorScheme="teal"
                 variant="solid"
               >
-               Logout
-
+                Logout
               </Button>
             </>
           ) : (
@@ -172,8 +160,7 @@ export default function Navbar() {
                 as={RouterLink}
                 to="/register"
                 variant="ghost"
-                color="white"
-                _hover={{ bg: "whiteAlpha.200" }}
+                colorScheme="teal"
                 onClick={onToggle}
               >
                 Register
@@ -182,8 +169,7 @@ export default function Navbar() {
                 as={RouterLink}
                 to="/login"
                 variant="ghost"
-                color="white"
-                _hover={{ bg: "whiteAlpha.200" }}
+                colorScheme="teal"
                 onClick={onToggle}
               >
                 Login
