@@ -13,6 +13,7 @@ import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 import { useAuth } from "../hooks/useAuth";
 import { useState, useEffect } from "react";
+import TruckLogoIcon from "./TruckLogoIcon";
 
 export default function Navbar() {
   const { driver, logout } = useAuth();
@@ -50,8 +51,12 @@ export default function Navbar() {
       borderColor="gray.200"
       boxShadow={scrolled ? "sm" : "none"}
     >
+      <Flex as={RouterLink} to="/" align="center" gap={2} _hover={{ textDecoration: "none" }}>
+  <TruckLogoIcon boxSize={7} color="teal.600" />
+  <Heading size="md" color="teal.600" fontWeight="bold">Delivery King</Heading>
+</Flex>
       {/* Brand */}
-      <Heading
+      {/* <Heading
         as={RouterLink}
         to="/"
         size="md"
@@ -60,7 +65,7 @@ export default function Navbar() {
         _hover={{ textDecoration: "none", color: "teal.700" }}
       >
         Delivery King
-      </Heading>
+      </Heading> */}
 
       <Spacer />
 

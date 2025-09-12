@@ -11,6 +11,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Onboarding from "./pages/Onboarding";
 import TestLottie from "./pages/TestLottie";
+import OnboardingGuard from "./routes/OnboardingGuard"
 import RedirectIfAuth from "./components/RedirectIfAuth";
 import TestLottieInline from "./pages/TestLottieInline";
 
@@ -82,6 +83,9 @@ export default function App() {
 <Route path="/onboarding/documents" element={<DocumentsUpload />} />
 <Route path="/test-lottie" element={<TestLottie />} />
 <Route path="/test-lottie-inline" element={<TestLottieInline />} />
+<Route element={<OnboardingGuard />}>
+  <Route path="/onboarding" element={<Onboarding />} />
+</Route>
 
         <Route
           path="/dashboard"
