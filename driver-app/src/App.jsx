@@ -12,8 +12,10 @@ import Register from "./pages/Register";
 import Onboarding from "./pages/Onboarding";
 import TestLottie from "./pages/TestLottie";
 import OnboardingGuard from "./routes/OnboardingGuard"
+import DashboardGuard from "./routes/DashboardGuard";
 import RedirectIfAuth from "./components/RedirectIfAuth";
 import TestLottieInline from "./pages/TestLottieInline";
+import Dashboard from "./pages/Dashboard";
 
 // Utility to parse query params
 function useQueryParams() {
@@ -78,16 +80,21 @@ export default function App() {
     </RedirectIfAuth>
   }
 />
-        <Route path="/onboarding/personal" element={<PersonalInfo />} />
-<Route path="/onboarding/vehicle" element={<VehicleInfo />} />
-<Route path="/onboarding/documents" element={<DocumentsUpload />} />
+<Route path="/dashboard" element={<ErrorBoundary>
+              <Dashboard />
+            </ErrorBoundary>} />
+
+        
 <Route path="/test-lottie" element={<TestLottie />} />
 <Route path="/test-lottie-inline" element={<TestLottieInline />} />
 <Route element={<OnboardingGuard />}>
   <Route path="/onboarding" element={<Onboarding />} />
+   <Route path="/onboarding/personal" element={<PersonalInfo />} />
+  <Route path="/onboarding/vehicle" element={<VehicleInfo />} />
+  <Route path="/onboarding/documents" element={<DocumentsUpload />} />
 </Route>
-
-        <Route
+         
+         <Route element={<DashboardGuard />}> <Route
           path="/dashboard"
           element={
             <ErrorBoundary>
@@ -96,7 +103,8 @@ export default function App() {
               </RequireApproval>
             </ErrorBoundary>
           }
-        />
+        /></Route>
+       
         {/* Placeholder onboarding route */}
       <Route
   path="/onboarding"
